@@ -102,7 +102,7 @@ class Compressor:
         dirs = []
         for dirName, subdirList, fileList in os.walk(dir_path):
             for fname in fileList:
-                if (fname != 'script.py' or fname != 'ICM20948.py'): # what files to not include
+                if (fname != 'script.py' or fname != 'ICM20948.py' or fname !='data_1000.txt' or fname !='data_1500.txt'or fname !='data_2000.txt'): # what files to not include
                     dirs.append(dirName + "\\" + fname)
         return dirs
     
@@ -155,7 +155,7 @@ com = Compressor()
 cmp = Comparator()
 clear = lambda: os.system('clear')
 
-cmp.get_preprocess('2018-09-19-03_57_11_VN100.csv')
+#cmp.get_preprocess('2018-09-19-03_57_11_VN100.csv')
 
 while True:
         clear()
