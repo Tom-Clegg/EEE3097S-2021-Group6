@@ -8,6 +8,7 @@ from os import listdir
 from os.path import isfile, join
 import time
 import zlib, base64
+from ICM20948 import *
 
 
 class Encryptor:
@@ -101,7 +102,7 @@ class Compressor:
         dirs = []
         for dirName, subdirList, fileList in os.walk(dir_path):
             for fname in fileList:
-                if (fname != 'script.py'): # what files to not include
+                if (fname != 'script.py' or fname != 'ICM20948.py'): # what files to not include
                     dirs.append(dirName + "\\" + fname)
         return dirs
     
@@ -152,32 +153,43 @@ key = b'[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb
 enc = Encryptor(key)
 com = Compressor()
 cmp = Comparator()
-clear = lambda: os.system('cls')
+clear = lambda: os.system('clear')
 
 cmp.get_preprocess('2018-09-19-03_57_11_VN100.csv')
 
 while True:
-        #clear()
-        choice = int(input(
-            "1. Press '1' to compress all files in the directory.\n"+
-            "2. Press '2' to encrypt all files in the directory.\n"+
-            "3. Press '3' to decrypt all files in the directory.\n"+
-            "4. Press '4' to decompress all files in the directory.\n"+
-            "5. Press '5' to compare pre-compression/encryption to post-decryption/decompression.\n"+
-            "6. Press '6' to exit.\n"))
         clear()
+        choice = int(input(
+            "1. Press '1' to record samples.\n"+
+            "2. Press '2' to compress all files in the directory.\n"+
+            "3. Press '3' to encrypt all files in the directory.\n"+
+            "4. Press '4' to decrypt all files in the directory.\n"+
+            "5. Press '5' to decompress all files in the directory.\n"+
+            "6. Press '6' to compare pre-compression/encryption to post-decryption/decompression.\n"+
+            "7. Press '7' to exit.\n"))
+        #clear()
         if choice == 1:
+            num_samples = int(input(
+                "Enter number of samples to record in batch: "))
+            print("Recording...")
+            data = sample_data(num_samples)
+            with open("data_"+str(num_samples)+".txt", "w") as text_file:
+                text_file.write(str(data))
+            text_file.close()
+            print("Done")
+            time.sleep(1)
+        if choice == 2:
             com.compress_all_files()
-        elif choice == 2:
-            enc.encrypt_all_files()
         elif choice == 3:
-            enc.decrypt_all_files()
+            enc.encrypt_all_files()
         elif choice == 4:
-            com.decompress_all_files()
+            enc.decrypt_all_files()
         elif choice == 5:
+            com.decompress_all_files()
+        elif choice == 6:
             cmp.get_postprocess('2018-09-19-03_57_11_VN100.csv')
             cmp.compare()
-        elif choice == 6:
+        elif choice == 7:
             exit()
         else:
             print("Please select a valid option!")
