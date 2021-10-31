@@ -51,8 +51,28 @@ class Encryptor:
         dirs = []
         for dirName, subdirList, fileList in os.walk(dir_path):
             for fname in fileList:
-                if (fname != 'script.py'): # what files to not include
-                    dirs.append(dirName + "\\" + fname)
+                if (fname == 'script.py' or fname == 'ICM20948.py' or fname == 'compare.py'):
+                    continue
+                else:
+                    dirs.append(dirName + "/" + fname)
+        return dirs
+    
+    #Used to test individually
+    def getUnencyptedFiles(self):
+        dirs = []
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_500.txt')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1000.txt')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1500.txt')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_2000.txt')
+        return dirs
+
+    #used to test individually 
+    def getEncyptedFiles(self):
+        dirs = []
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_500.txt.enc')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1000.txt.enc')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1500.txt.enc')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_2000.txt.enc')
         return dirs
 
     def encrypt_all_files(self):
@@ -97,14 +117,6 @@ class Compressor:
         decompressed_file.write(decompressed.decode("utf-8"))
         decompressed_file.close()
     
-    def getAllFiles(self):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        dirs = []
-        for dirName, subdirList, fileList in os.walk(dir_path):
-            for fname in fileList:
-                if (fname != 'script.py' or fname != 'ICM20948.py' or fname !='data_1000.txt' or fname !='data_1500.txt'or fname !='data_2000.txt'): # what files to not include
-                    dirs.append(dirName + "\\" + fname)
-        return dirs
     
     def compress_all_files(self):
         start = time.time()
@@ -121,22 +133,73 @@ class Compressor:
             self.decompress_file(file_name)
         stop =time.time()
         print('Decompression time: '+ str(stop-start))
+    
+    def getAllFiles(self):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        dirs = []
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_50.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_500.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1000.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1500.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_2000.txt')
+        #for dirName, subdirList, fileList in os.walk(dir_path):
+        #    for fname in fileList:
+        #        if (fname == 'script.py' or fname == 'ICM20948.py' or fname == 'compare.py'):
+        #            continue
+        #        else:
+        #            dirs.append(dirName + "/" + fname)
+        return dirs
+    
+    def getUnencyptedFiles(self):
+        dirs = []
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_500.txt')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1000.txt')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1500.txt')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_2000.txt')
+        return dirs
+    
+    def getEncyptedFiles(self):
+        dirs = []
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_500.txt.enc')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1000.txt.enc')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1500.txt.enc')
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_2000.txt.enc')
+        return dirs
 
 
 
 class Comparator:
     def __init__(self):
         pass
+
+    def getAllFiles(self):
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        dirs = []
+        #dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_50.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_500.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1000.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_1500.txt')
+        dirs.append('/home/pi/Documents/3097/EEE3097S-2021-Group6/data_2000.txt')
+        return dirs
+
+    def get_preprocess(self):
+        self.pretext = ""
+        dirs = self.getAllFiles()
+        for file_name in dirs:
+            with open (file_name, 'r') as myFile:
+                content1 = myFile.read()
+            self.pretext += content1
+            myFile.close()
     
-    def get_preprocess(self, file_name):
-        file_to_compress = open(file_name, 'r')
-        self.pretext = file_to_compress.read()
-        file_to_compress.close()
-    
-    def get_postprocess(self, file_name):
-        file_to_compress = open(file_name, 'r')
-        self.posttext = file_to_compress.read()
-        file_to_compress.close()
+    def get_postprocess(self):
+        self.posttext = ""
+        dirs = self.getAllFiles()
+        for file_name in dirs:
+            with open (file_name, 'r') as myFile:
+                content2 = myFile.read()
+            self.posttext += content2
+            myFile.close()
+             
     
     def compare(self):
         if self.pretext == self.posttext:
@@ -155,10 +218,11 @@ com = Compressor()
 cmp = Comparator()
 clear = lambda: os.system('clear')
 
-#cmp.get_preprocess('2018-09-19-03_57_11_VN100.csv')
+cmp.get_preprocess()
+clear()
 
 while True:
-        clear()
+        #clear()
         choice = int(input(
             "1. Press '1' to record samples.\n"+
             "2. Press '2' to compress all files in the directory.\n"+
@@ -167,7 +231,7 @@ while True:
             "5. Press '5' to decompress all files in the directory.\n"+
             "6. Press '6' to compare pre-compression/encryption to post-decryption/decompression.\n"+
             "7. Press '7' to exit.\n"))
-        #clear()
+        clear()
         if choice == 1:
             num_samples = int(input(
                 "Enter number of samples to record in batch: "))
@@ -187,7 +251,7 @@ while True:
         elif choice == 5:
             com.decompress_all_files()
         elif choice == 6:
-            cmp.get_postprocess('2018-09-19-03_57_11_VN100.csv')
+            cmp.get_postprocess()
             cmp.compare()
         elif choice == 7:
             exit()
